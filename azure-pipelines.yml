@@ -10,8 +10,15 @@ pr:
     include:
     - main
 
+strategy:
+  matrix:
+   'Ubuntu Latest':
+     image: 'ubuntu-latest'
+   'Windows Latest':
+     image: 'windows-latest'
+
 pool:
-  vmImage: 'windows-latest'
+  vmImage: $(image)
 
 variables:
   buildConfiguration: 'Release'

@@ -5,6 +5,11 @@ VisualStudioVersion = 17.3.32605.63
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-web-api", "test-web-api\test-web-api.csproj", "{CA5C5FB3-6B25-4F89-BCC1-BCE8892C6A54}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{47A45B85-06CC-460E-A679-7E574E7D48E4}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

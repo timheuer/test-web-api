@@ -1,0 +1,62 @@
+# HashR Build Pipeline
+
+trigger:
+  branches:
+    include:
+    - main
+
+pr:
+  branches:
+    include:
+    - main
+
+pool:
+  name: 'AzurePipelines-EO'
+  demands:
+  - ImageOverride -equals AzurePipelinesUbuntu20.04compliant
+
+variables:
+  buildConfiguration: 'Release'
+  rid: 'linux-x64'
+  projectPath: 'test-web-api'
+
+steps:
+    - task: UseDotNet@2
+      inputs:
+        version: '7.0.x'
+        packageType: sdk
+        includePreviewVersions: true
+    
+    - task: DotNetCoreCLI@2
+      displayName: "Restore"
+      inputs:
+        command: 'restore'
+        projects: '$(projectPath)/*.csproj'
+        restoreArguments: '-r $(rid) /p:Configuration="$(buildConfiguration)"'
+
+    - script: 'echo -e "\"$(Build.BuildNumber)|$(Build.BuildId)\"" > buildinfo.json'
+      displayName: "Emit build information"
+      workingDirectory: '$(Build.SourcesDirectory)/$(projectPath)'
+      failOnStderr: true
+
+    - task: DotNetCoreCLI@2
+      displayName: "Build"
+      inputs:
+        command: 'build'
+        projects: '$(projectPath)/*.csproj'
+        arguments: '-r $(rid) --self-contained true --configuration "$(buildConfiguration)" --no-restore /p:SourceRevisionId=$(Build.SourceVersion) /p:BuildNumber=$(Build.BuildNumber) /p:BuildId=$(Build.BuildId)'
+
+    - task: DotNetCoreCLI@2
+      displayName: "Publish"
+      inputs:
+        command: 'publish'
+        projects: '$(projectPath)/*.csproj'
+        publishWebProjects: false
+        arguments: '-r $(rid) --self-contained true --configuration "$(BuildConfiguration)" --no-build --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: true
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Upload Artifacts"
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+        artifactName: 'test-web-api'

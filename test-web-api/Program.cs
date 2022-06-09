@@ -38,6 +38,12 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
+app.MapGet("/hello", () =>
+{
+    var c = new ClassLibrary1.Class1();
+    return c.SayHello();
+});
+
 app.Run();
 
 internal record WeatherForecast(DateTime Date, int TemperatureC, string? Summary)

@@ -11,7 +11,7 @@ pr:
     - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 variables:
   buildConfiguration: 'Release'
@@ -32,17 +32,12 @@ steps:
         projects: '$(projectPath)/*.csproj'
         restoreArguments: '-r $(rid) /p:Configuration="$(buildConfiguration)"'
 
-    - script: 'echo -e "\"$(Build.BuildNumber)|$(Build.BuildId)\"" > buildinfo.json'
-      displayName: "Emit build information"
-      workingDirectory: '$(Build.SourcesDirectory)/$(projectPath)'
-      failOnStderr: true
-
     - task: DotNetCoreCLI@2
       displayName: "Build"
       inputs:
         command: 'build'
         projects: '$(projectPath)/*.csproj'
-        arguments: '-r $(rid) --self-contained true --configuration "$(buildConfiguration)" --no-restore /p:SourceRevisionId=$(Build.SourceVersion) /p:BuildNumber=$(Build.BuildNumber) /p:BuildId=$(Build.BuildId)'
+        arguments: '-r $(rid) --self-contained true --configuration "$(buildConfiguration)" --no-restore'
 
     - task: DotNetCoreCLI@2
       displayName: "Publish"

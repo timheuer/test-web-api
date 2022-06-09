@@ -18,7 +18,9 @@ strategy:
      image: 'windows-latest'
 
 pool:
-  vmImage: $(image)
+  name: 'AzurePipelines-EO'
+  demands:
+  - ImageOverride -equals AzurePipelinesUbuntu20.04compliant
 
 variables:
   buildConfiguration: 'Release'

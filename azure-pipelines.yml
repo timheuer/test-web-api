@@ -17,11 +17,6 @@ strategy:
    'Windows Latest':
      image: 'windows-latest'
 
-pool:
-  name: 'AzurePipelines-EO'
-  demands:
-  - ImageOverride -equals AzurePipelinesUbuntu20.04compliant
-
 variables:
   buildConfiguration: 'Release'
   rid: 'linux-x64'
